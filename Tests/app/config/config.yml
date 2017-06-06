@@ -1,0 +1,53 @@
+parameters:
+  locale: 'en'
+  database_host: 'localhost'
+  database_port: '3306'
+  database_name: 'test'
+  database_user: 'test'
+  database_password: 'test'
+  kernel:
+    debug: true
+
+framework:
+  test: ~
+  translator: ~
+  secret: 'secret'
+  router:
+    resource: ~
+    strict_requirements: "%kernel.debug%"
+  form: true
+  csrf_protection: true
+  validation: { enable_annotations: true }
+  templating:
+    engines: ['twig']
+  default_locale:  "%locale%"
+  trusted_proxies: ~
+  session:
+    storage_id:  session.storage.mock_file
+  fragments:       ~
+  http_method_override: true
+  profiler: { only_exceptions: false }
+
+monolog:
+  handlers:
+   main:
+     type: test
+
+# Twig Configuration
+twig:
+  debug: "%kernel.debug%"
+  strict_variables: "%kernel.debug%"
+
+# Doctrine Configuration
+doctrine:
+  dbal:
+    driver: 'pdo_mysql'
+    host: "%database_host%"
+    port: "%database_port%"
+    dbname: "%database_name%"
+    user: "%database_user%"
+    password: "%database_password%"
+    charset: UTF8
+  orm:
+    default_entity_manager: default
+    auto_generate_proxy_classes: "%kernel.debug%"

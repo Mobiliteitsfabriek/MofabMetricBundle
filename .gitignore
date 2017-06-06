@@ -1,0 +1,5 @@
+*.php~
+composer.phar
+.idea/
+build/
+vendor/

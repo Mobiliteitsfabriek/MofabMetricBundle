@@ -1,0 +1,37 @@
+{
+    "name": "mofab/metric-bundle",
+    "description": "Mobiliteitsfabriek Metric Bundle",
+    "keywords": ["mofab", "mobiliteitsfabriek", "metric"],
+    "homepage": "https://www.mobiliteitsfabriek.nl/",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter van der Leek",
+            "email": "peter.vanderleek@mobiliteitsfabriek.nl",
+            "homepage": "https://www.mobiliteitsfabriek.nl/"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "3.*",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "~1.2"
+    },
+    "require-dev": {
+        "symfony/monolog-bundle": "~2.4",
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
+        "phpunit/phpunit": "3.7.*",
+        "symfony/phpunit-bridge": "~2.7",
+        "phploc/phploc": "^2.0",
+        "pdepend/pdepend": "^2.0",
+        "phpmd/phpmd": "@stable",
+        "squizlabs/php_codesniffer": "^2.0",
+        "sebastian/phpcpd": "^2.0"
+    },
+    "autoload": {
+        "psr-0": { "Mofab\\MetricBundle": "" }
+    },
+    "target-dir": "Mofab/MetricBundle"
+}

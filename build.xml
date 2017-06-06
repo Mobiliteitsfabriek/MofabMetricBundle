@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MofabMetricBundle" default="build">
+    <property file="build.properties" />
+    <path id="antclasspath">
+        <fileset dir="/usr/share/java">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+    <target name="build" depends="prepare" />
+
+    <target name="clean" description="Clean build artifacts">
+        <delete dir="${basedir}/build" />
+        <delete dir="${basedir}/vendor" />
+    </target>
+
+    <target name="prepare" depends="clean" description="Prepare for build">
+        <mkdir dir="${basedir}/build" />
+        <mkdir dir="${basedir}/build/logs" />
+        <mkdir dir="${basedir}/build/results" />
+        <exec executable="curl" failonerror="true">
+            <arg value="https://getcomposer.org/installer" />
+            <arg value="--output" />
+            <arg path="${basedir}/build/installer.php" />
+        </exec>
+        <exec executable="php" failonerror="true">
+            <arg value="${basedir}/build/installer.php" />
+        </exec>
+        <echo message="composer install" />
+        <exec executable="${basedir}/composer.phar" failonerror="true">
+            <arg value="--no-interaction" />
+            <arg value="install" />
+        </exec>
+        <delete file="${basedir}/build/installer.php" />
+    </target>
+
+    <target name="phpunit" description="Run the unit tests">
+        <exec dir="" executable="./vendor/bin/phpunit" failonerror="false">
+            <arg value="--configuration" />
+            <arg path="${basedir}/phpunit.xml" />
+            <arg value="-d zend.enable_gc=0" />
+        </exec>
+    </target>
+
+    <target name="phploc" description="Measure project size using PHPLOC">
+        <exec executable="./bin/phploc">
+            <arg value="--log-csv" />
+            <arg value="${basedir}/build/logs/phploc.csv" />
+            <arg value="--exclude" />
+            <arg value="vendor" />
+            <arg path="${basedir}/" />
+        </exec>
+    </target>
+
+    <target name="pdepend" description="Calculate software metrics using PHP_Depend">
+        <exec executable="./bin/pdepend">
+            <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+            <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+            <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+            <arg value="--ignore=${basedir}/cache,${basedir}/vendor,${basedir}/features" />
+            <arg path="${basedir}/" />
+        </exec>
+    </target>
+
+    <target name="phpmd" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+        <exec executable="./bin/phpmd">
+            <arg path="${basedir}/src/" />
+            <arg value="xml" />
+            <arg value="--reportfile" />
+            <arg value="${basedir}/build/logs/pmd.xml" />
+        </exec>
+    </target>
+
+    <target name="phpcpd" description="Find duplicate code using PHPCPD">
+        <exec executable="./bin/phpcpd">
+            <arg value="--log-pmd" />
+            <arg value="${basedir}/build/logs/pmd-cpd.xml" />
+            <arg value="--exclude" />
+            <arg value="Tests" />
+            <arg value="--exclude" />
+            <arg value="vendor" />
+            <arg path="${basedir}/" />
+        </exec>
+    </target>
+
+    <target name="phpcs" description="Scan for code style violations">
+        <exec executable="./vendor/bin/phpcs" failonerror="false">
+            <arg value="--standard=PSR2" />
+            <arg path="${basedir}/" />
+            <arg value="--extensions=php" />
+            <arg value="--ignore=vendor" />
+            <arg value="--report=checkstyle" />
+            <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+            <arg value="-v" />
+        </exec>
+    </target>
+</project>
