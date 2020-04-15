@@ -6,6 +6,7 @@ use Mofab\MetricBundle\Entity\Metric;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Collections\ArrayCollection;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class MetricHelper
 {
@@ -15,7 +16,7 @@ class MetricHelper
     private $doctrine;
 
     /**
-     * @var Logger
+     * @var Logger|LoggerInterface
      */
     private $logger;
 
@@ -38,7 +39,7 @@ class MetricHelper
      * @param Registry $registry
      * @param Logger $logger
      */
-    public function __construct(Registry $registry, Logger $logger)
+    public function __construct(Registry $registry, LoggerInterface $logger)
     {
         $this->doctrine = $registry;
         $this->logger = $logger;
